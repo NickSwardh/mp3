@@ -3,13 +3,13 @@
 	// This program is free software; you can redistribute it and/or modify it under
 	// the terms of the GNU General Public License as published by the Free Software
 	// Foundation; either version 2 of the License, or any later version under the
-	// following condition: Comment below must stay intact!
+	// following condition: Comment below must stay intact.
 
 	/**********************************************************************************
 
-								MP3 ID3 data extraction class
+					MP3 ID3 data extraction class
 
-						 	  By Nick Swardh | www.nswardh.com
+				      By Nick Swardh | www.nswardh.com
 
 	**********************************************************************************/
 
@@ -17,119 +17,119 @@ class Mp3Tag {
 
 
 	// Class members
-	private $handle;					// Used for the filestream.
-	private $tag_count;					// Holds number of predefined ID3-tags.
-	private $tag = array();				// Used for storing all Id3 tags.
+	private $handle;			// Used for the filestream.
+	private $tag_count;			// Holds number of predefined ID3-tags.
+	private $tag = array();			// Used for storing all Id3 tags.
 
 	// Predifined array of ID3-tags.
 	private $idv_tag = array(
-		'AENC' => 'encryption', 		// Audio encryption
-		'APIC' => 'picture',			// Attached picture
-		'ASPI' => 'audio_seek',			// Audio seek point index
-		'COMM' => 'comments',			// Comments
-		'COMR' => 'com_frame',			// Commercial frame
-		'ENCR' => 'enc_method',			// Encryption method registration
-		'EQU2' => 'equalization',		// Equalisation (2)
-		'ETCO' => 'timing_code',		// Event timing codes
+		'AENC' => 'encryption', 	// Audio encryption
+		'APIC' => 'picture',		// Attached picture
+		'ASPI' => 'audio_seek',		// Audio seek point index
+		'COMM' => 'comments',		// Comments
+		'COMR' => 'com_frame',		// Commercial frame
+		'ENCR' => 'enc_method',		// Encryption method registration
+		'EQU2' => 'equalization',	// Equalisation (2)
+		'ETCO' => 'timing_code',	// Event timing codes
 		'GEOB' => 'gen_encap_object',	// General encapsulated object
-		'GRID' => 'group_id',			// Group identification registration
-		'LINK' => 'linked_info',		// Linked information
-		'MCDI' => 'cd_id',				// Music CD identifier
+		'GRID' => 'group_id',		// Group identification registration
+		'LINK' => 'linked_info',	// Linked information
+		'MCDI' => 'cd_id',		// Music CD identifier
 		'MLLT' => 'mpeg_lookup_table',	// MPEG location lookup table
-		'OWNE' => 'owner_frame',		// Ownership frame
-		'PRIV' => 'private_frame',		// Private frame
-		'PCNT' => 'play_counter',		// Play counter
-		'POPM' => 'popularimeter',		// Popularimeter
-		'POSS' => 'pos_sync_frame',		// Position synchronisation frame
+		'OWNE' => 'owner_frame',	// Ownership frame
+		'PRIV' => 'private_frame',	// Private frame
+		'PCNT' => 'play_counter',	// Play counter
+		'POPM' => 'popularimeter',	// Popularimeter
+		'POSS' => 'pos_sync_frame',	// Position synchronisation frame
 		'RBUF' => 'recom_buffer_size',	// Recommended buffer size
-		'RVA2' => 'rel_vol_adj',		// Relative volume adjustment (2)
-		'RVRB' => 'reverb',				// Reverb
-		'SEEK' => 'seek_frame',			// Seek frame
-		'SIGN' => 'sign_frame',			// Signature frame
-		'SYLT' => 'sync_lyric',			// Synchronised lyric/text
+		'RVA2' => 'rel_vol_adj',	// Relative volume adjustment (2)
+		'RVRB' => 'reverb',		// Reverb
+		'SEEK' => 'seek_frame',		// Seek frame
+		'SIGN' => 'sign_frame',		// Signature frame
+		'SYLT' => 'sync_lyric',		// Synchronised lyric/text
 		'SYTC' => 'sync_tempo_code',	// Synchronised tempo codes
-		'TALB' => 'album_title',		// Album/Movie/Show title
-		'TBPM' => 'bpm',				// BPM (beats per minute)
-		'TCOM' => 'composer',			// Composer
-		'TCON' => 'content_type',		// Content type
-		'TCOP' => 'copyright',			// Copyright message
-		'TDEN' => 'enc_time',			// Encoding time
-		'TDOR' => 'org_release',		// Original release time
-		'TDRC' => 'rec_time',			// Recording time
-		'TDRL' => 'rel_time',			// Release time
-		'TDTG' => 'tag_time',			// Tagging time
-		'TENC' => 'encoded_by',			// Encoded by
-		'TEXT' => 'lyrics_by',			// Lyricist/Text writer
-		'TFLT' => 'tile_type',			// File type
+		'TALB' => 'album_title',	// Album/Movie/Show title
+		'TBPM' => 'bpm',		// BPM (beats per minute)
+		'TCOM' => 'composer',		// Composer
+		'TCON' => 'content_type',	// Content type
+		'TCOP' => 'copyright',		// Copyright message
+		'TDEN' => 'enc_time',		// Encoding time
+		'TDOR' => 'org_release',	// Original release time
+		'TDRC' => 'rec_time',		// Recording time
+		'TDRL' => 'rel_time',		// Release time
+		'TDTG' => 'tag_time',		// Tagging time
+		'TENC' => 'encoded_by',		// Encoded by
+		'TEXT' => 'lyrics_by',		// Lyricist/Text writer
+		'TFLT' => 'tile_type',		// File type
 		'TIPL' => 'involved_people',	// Involved people list
-		'TIT1' => 'cont_grp_desc',		// Content group description
-		'TIT2' => 'song_title',			// Title/songname/content description
-		'TIT3' => 'subtitle',			// Subtitle/Description refinement
-		'TKEY' => 'init_key',			// Initial key
-		'TLAN' => 'language',			// Language(s)
-		'TLEN' => 'length',				// Length
-		'TMCL' => 'credits',			// Musician credits list
-		'TMED' => 'media_type',			// Media type
-		'TMOO' => 'mood',				// Mood
-		'TOAL' => 'org_title',			// Original album/movie/show title
-		'TOFN' => 'org_filename',		// Original filename
+		'TIT1' => 'cont_grp_desc',	// Content group description
+		'TIT2' => 'song_title',		// Title/songname/content description
+		'TIT3' => 'subtitle',		// Subtitle/Description refinement
+		'TKEY' => 'init_key',		// Initial key
+		'TLAN' => 'language',		// Language(s)
+		'TLEN' => 'length',		// Length
+		'TMCL' => 'credits',		// Musician credits list
+		'TMED' => 'media_type',		// Media type
+		'TMOO' => 'mood',		// Mood
+		'TOAL' => 'org_title',		// Original album/movie/show title
+		'TOFN' => 'org_filename',	// Original filename
 		'TOLY' => 'org_lyric_writer',	// Original lyricist(s)/text writer(s)
-		'TOPE' => 'org_artist',			// Original artist(s)/performer(s)
-		'TOWN' => 'file_owner',			// File owner/licensee
-		'TPE1' => 'artist',				// Lead performer(s)/Soloist(s)
-		'TPE2' => 'band',				// Band/orchestra/accompaniment
-		'TPE3' => 'performer',			// Conductor/performer refinement
-		'TPE4' => 'remixed',			// Interpreted, remixed, or otherwise modified by
-		'TPOS' => 'part_of_set',		// Part of a set
-		'TPRO' => 'prod_notice',		// Produced notice
-		'TPUB' => 'publisher',			// Publisher
-		'TRCK' => 'track_nr',			// Track number/Position in set
-		'TRSN' => 'net_radio',			// Internet radio station name
+		'TOPE' => 'org_artist',		// Original artist(s)/performer(s)
+		'TOWN' => 'file_owner',		// File owner/licensee
+		'TPE1' => 'artist',		// Lead performer(s)/Soloist(s)
+		'TPE2' => 'band',		// Band/orchestra/accompaniment
+		'TPE3' => 'performer',		// Conductor/performer refinement
+		'TPE4' => 'remixed',		// Interpreted, remixed, or otherwise modified by
+		'TPOS' => 'part_of_set',	// Part of a set
+		'TPRO' => 'prod_notice',	// Produced notice
+		'TPUB' => 'publisher',		// Publisher
+		'TRCK' => 'track_nr',		// Track number/Position in set
+		'TRSN' => 'net_radio',		// Internet radio station name
 		'TRSO' => 'net_radio_owner',	// Internet radio station owner
-		'TSOA' => 'album_order',		// Album sort order
+		'TSOA' => 'album_order',	// Album sort order
 		'TSOP' => 'performer_order',	// Performer sort order
-		'TSOT' => 'title_order',		// Title sort order
-		'TSRC' => 'isrc',				// ISRC (international standard recording code)
-		'TSSE' => 'encode_setup',		// Software/Hardware and settings used for encoding
-		'TSST' => 'set_subtitle',		// Set subtitle
+		'TSOT' => 'title_order',	// Title sort order
+		'TSRC' => 'isrc',		// ISRC (international standard recording code)
+		'TSSE' => 'encode_setup',	// Software/Hardware and settings used for encoding
+		'TSST' => 'set_subtitle',	// Set subtitle
 		'TXXX' => 'user_defined_text',	// User defined text information frame
-		'TYER' => 'year',				// Year
-		'UFID' => 'unique_file_id',		// Unique file identifier
-		'USER' => 'terms',				// Terms of use
-		'USLT' => 'unsync_lyric',		// Unsynchronised lyric/text transcription
-		'WCOM' => 'com_info',			// Commercial information
-		'WCOP' => 'copyright_info',		// Copyright/Legal information
+		'TYER' => 'year',		// Year
+		'UFID' => 'unique_file_id',	// Unique file identifier
+		'USER' => 'terms',		// Terms of use
+		'USLT' => 'unsync_lyric',	// Unsynchronised lyric/text transcription
+		'WCOM' => 'com_info',		// Commercial information
+		'WCOP' => 'copyright_info',	// Copyright/Legal information
 		'WOAF' => 'official_webpage',	// Official audio file webpage
 		'WOAR' => 'official_artist',	// Official artist/performer webpage
 		'WOAS' => 'official_source',	// Official audio source webpage
-		'WORS' => 'official_radio',		// Official Internet radio station homepage
-		'WPAY' => 'payment', 			// Payment
+		'WORS' => 'official_radio',	// Official Internet radio station homepage
+		'WPAY' => 'payment', 		// Payment
 		'WPUB' => 'publiser_webpage',	// Publishers official webpage
-		'WXXX' => 'user_url'			//User defined URL link frame
+		'WXXX' => 'user_url'		// User defined URL link frame
 		);
 
 	// Predefined array of album art/picture types.
 	private $pic_type = array(
-		'00' => 'Other',    			// Other
-		'01' => 'png_icon',      		// 32x32 pixels 'file icon' (PNG only)
-		'02' => 'icon',      			// Other file icon
-		'03' => 'front',      			// Cover (front)
-		'04' => 'back',      			// Cover (back)
-		'05' => 'leaflet',      		// Leaflet page
-		'06' => 'media',      			// Media (e.g. lable side of CD)
+		'00' => 'Other',    		// Other
+		'01' => 'png_icon',      	// 32x32 pixels 'file icon' (PNG only)
+		'02' => 'icon',      		// Other file icon
+		'03' => 'front',      		// Cover (front)
+		'04' => 'back',      		// Cover (back)
+		'05' => 'leaflet',      	// Leaflet page
+		'06' => 'media',      		// Media (e.g. lable side of CD)
 		'07' => 'lead_artist',      	// Lead artist/lead performer/soloist
-		'08' => 'artist',      			// Artist/performer
-		'09' => 'conductor',      		// Conductor
-		'0A' => 'band',      			// Band/Orchestra
-		'0B' => 'composer',      		// Composer
+		'08' => 'artist',      		// Artist/performer
+		'09' => 'conductor',      	// Conductor
+		'0A' => 'band',      		// Band/Orchestra
+		'0B' => 'composer',      	// Composer
 		'0C' => 'text_writer',      	// Lyricist/text writer
-		'0D' => 'location',      		// Recording Location
+		'0D' => 'location',      	// Recording Location
 		'0E' => 'during_recording', 	// During recording
 		'0F' => 'during_performance',	// During performance
 		'10' => 'video_capture',    	// Movie/video screen capture
-		'11' => 'bright',      			// A bright colored fish (OGG Vorbis, opensource audio format).
+		'11' => 'bright',      		// A bright colored fish (OGG Vorbis, opensource audio format).
 		'12' => 'illustration',     	// Illustration
-		'13' => 'logotype',      		// Band/artist logotype
+		'13' => 'logotype',      	// Band/artist logotype
 		'14' => 'studio_logotype'   	// Publisher/Studio logotype
 		);
 
@@ -155,16 +155,16 @@ class Mp3Tag {
 		$this->handle 	= fopen($file, 'rb');
 
 		// Read and Unpack the first 10 bytes. Split into an array.
-		$header	 		= unpack("a3signature/c1version/c1revision/c1flag/Nsize", fread($this->handle, 10));
+		$header	 	= unpack("a3signature/c1version/c1revision/c1flag/Nsize", fread($this->handle, 10));
 
 		if ($header['signature'] == 'ID3') {
 
 			$this->tag['header'] = $header;		// Store headers.
-			$this->Read();						// Extract all ID3-tags.
+			$this->Read();				// Extract all ID3-tags.
 
 		}
 
-		// Close filestream.
+	// Close filestream.
         fclose($this->handle);
 
         // Return array.
@@ -262,9 +262,9 @@ class Mp3Tag {
 		}
 
 		// Get image data.
-		$image_data		= substr($image, $offset);			// Image data (binary).
-		$data['mime']	= 'image/' . $mime_type;			// MIME-type.
-		$data['size']	= strlen($image_data);				// Image size.
+		$image_data		= substr($image, $offset);	// Image data (binary).
+		$data['mime']	= 'image/' . $mime_type;		// MIME-type.
+		$data['size']	= strlen($image_data);			// Image size.
 		$data['data']	= base64_encode($image_data);		// Encode the binary string.
 
 		// Get the hexadecimal valude of the album art type. Front picture, back, logo etc.
