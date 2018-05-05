@@ -6,15 +6,17 @@ The object returns an array containing whatever data that was found. Ex: http://
 
 # How to use
 require 'mp3data.php';
-$mp3  = new Mp3Tag();
-$data = $mp3->Get('some_audio.mp3');
 
-print_r($data);
+$mp3  = new Mp3Tag();
+
+$data = $mp3->Get( 'some_audio.mp3' );
+
+print_r( $data );
 
 # Extracted album art/pictures
 The extracted binary string(s) are base64_encoded. To display the images you simply do:
 
-foreach ($data['tag']['picture'] as $image) {
+foreach ( $data['tag']['picture'] as $image ) {
 
 	echo '<img src="data:' . $image['mime'] . ';charset=utf-8;base64,' . $image['data'] . '" />';
 
