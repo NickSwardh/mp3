@@ -9,7 +9,7 @@ The object returns an array containing whatever data that was found. Ex: http://
 // Load class.
 require 'mp3data.php';
 
-// Instatiate a new object.
+// Instantiate a new object.
 $mp3  = new Mp3Tag();
 
 // Get ID3 info.
